@@ -1,5 +1,11 @@
 # MoodWave
 
+> La versión combinada y más reciente del proyecto se encuentra en la rama
+> [`prototipo_final`](https://github.com/Franco-roca/moodwave_ipn/tree/prototipo_final).
+>
+> Incluye la interfaz Refugio natural, insights, predicción emocional,
+> reportes PDF y el APK de demostración.
+
 **Etapa 2 ampliada (31/10/2026):** estadísticas completas, media móvil, dispersión, regresión logística local real, Health Connect nativo, exportación JSON y apoyo local. Documentación vigente: [implementación y entrega](docs/STAGE2_IMPLEMENTATION.md); resultados en [VALIDATION.md](VALIDATION.md). Las secciones históricas de rediseño documentan entregas anteriores.
 
 Después de la limpieza de archivos regenerables, el APK de prueba conservado está en `artifacts/apk/moodwave-trial-debug.apk`. Las nuevas compilaciones seguirán generándose en `build/app/outputs/flutter-apk/`.
