@@ -1,3 +1,5 @@
+import 'refugio_art.dart';
+
 import 'package:flutter/material.dart';
 
 import 'mood_style.dart';
@@ -6,11 +8,13 @@ import '../features/records/domain/record.dart';
 import 'refugio.dart';
 
 class WaveHeader extends StatelessWidget {
-  const WaveHeader(this.title, this.subtitle, {super.key});
+  const WaveHeader(this.title, this.subtitle, {super.key, this.scene});
+  final RefugioScene? scene;
   final String title, subtitle;
   @override
   Widget build(BuildContext context) => Container(
     width: double.infinity,
+    constraints: const BoxConstraints(minHeight: 168),
     clipBehavior: Clip.antiAlias,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(Refugio.radius),
@@ -25,29 +29,51 @@ class WaveHeader extends StatelessWidget {
         ),
       ],
     ),
-    child: CustomPaint(
-      painter: const BotanicalArt(dark: true),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: const Color(0xfffff8e9),
-                fontWeight: FontWeight.w800,
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: RefugioBanner(scene: scene ?? sceneForTitle(title)),
+        ),
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xff183d2d).withValues(alpha: .96),
+                  const Color(0xff183d2d).withValues(alpha: .82),
+                  const Color(0xff183d2d).withValues(
+                    alpha: Theme.of(context).brightness == Brightness.dark
+                        ? .68
+                        : .32,
+                  ),
+                ],
+                stops: const [0, .52, 1],
               ),
             ),
-            const SizedBox(height: 5),
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.bodyLarge
-                  ?.copyWith(color: const Color(0xfffff8e9)),
-            ),
-          ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: const Color(0xfffff8e9),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodyLarge
+                    ?.copyWith(color: const Color(0xfffff8e9)),
+              ),
+            ],
+          ),
+        ),
+      ],
     ),
   );
 }
@@ -120,7 +146,7 @@ class MoodSelector extends StatelessWidget {
                                   ),
                                 ),
                                 if (value == mood)
-                                  Icon(
+                                  RefugioIcon(
                                     Icons.check_circle_rounded,
                                     size: 18,
                                     color: Theme.of(context)
@@ -164,7 +190,7 @@ class EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          const Icon(Icons.water_drop_outlined, size: 48),
+          const RefugioIcon(Icons.water_drop_outlined, size: 48),
           const SizedBox(height: 12),
           const Text(
             'Cada día cuenta',

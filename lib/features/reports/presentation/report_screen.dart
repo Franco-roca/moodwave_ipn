@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -216,7 +218,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
             subtitle: Text(
               '${format.format(span.start)} - ${format.format(shiftDay(span.end, -1))}',
             ),
-            trailing: const Icon(Icons.calendar_month),
+            trailing: const RefugioIcon(Icons.calendar_month),
             onTap: busy ? null : chooseDate,
           ),
           SwitchListTile(
@@ -278,17 +280,17 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
             children: [
               FilledButton.icon(
                 onPressed: busy ? null : () => preview(),
-                icon: const Icon(Icons.picture_as_pdf_outlined),
+                icon: const RefugioIcon(Icons.picture_as_pdf_outlined),
                 label: const Text('Vista previa'),
               ),
               OutlinedButton.icon(
                 onPressed: busy ? null : save,
-                icon: const Icon(Icons.save_alt),
+                icon: const RefugioIcon(Icons.save_alt),
                 label: const Text('Guardar'),
               ),
               OutlinedButton.icon(
                 onPressed: busy ? null : share,
-                icon: const Icon(Icons.share_outlined),
+                icon: const RefugioIcon(Icons.share_outlined),
                 label: const Text('Compartir'),
               ),
             ],
@@ -300,7 +302,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                 IconButton(
                   tooltip: 'Página anterior',
                   onPressed: busy || page == 0 ? null : () => preview(page - 1),
-                  icon: const Icon(Icons.chevron_left),
+                  icon: const RefugioIcon(Icons.chevron_left),
                 ),
                 Expanded(
                   child: Text(
@@ -313,7 +315,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                   onPressed: busy || page + 1 >= pdf!.pageCount
                       ? null
                       : () => preview(page + 1),
-                  icon: const Icon(Icons.chevron_right),
+                  icon: const RefugioIcon(Icons.chevron_right),
                 ),
               ],
             ),

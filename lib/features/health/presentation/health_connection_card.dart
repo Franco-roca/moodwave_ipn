@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../app/state.dart';
@@ -94,7 +96,7 @@ class _HealthConnectionCardState extends State<HealthConnectionCard> {
   Widget build(BuildContext context) => Card(
     child: ExpansionTile(
       key: const PageStorageKey('health-connection'),
-      leading: const Icon(Icons.health_and_safety_outlined),
+      leading: const RefugioIcon(Icons.health_and_safety_outlined),
       title: const Text('Health Connect'),
       subtitle: Text(
         source.available

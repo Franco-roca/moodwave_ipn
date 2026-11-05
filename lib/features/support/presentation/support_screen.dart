@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,7 +22,7 @@ class SupportScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          Icon(
+          RefugioIcon(
             Icons.favorite_outline,
             size: 72,
             color: Theme.of(context).colorScheme.primary,
@@ -61,7 +63,7 @@ class SupportScreen extends StatelessWidget {
                           const SnackBar(content: Text('Número copiado')),
                         );
                       },
-                      icon: const Icon(Icons.copy),
+                      icon: const RefugioIcon(Icons.copy),
                       label: const Text('Copiar teléfono'),
                     ),
                     SelectableText(r.website),

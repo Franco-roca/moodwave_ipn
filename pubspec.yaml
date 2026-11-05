@@ -81,7 +81,12 @@ flutter:
         - asset: assets/fonts/Roboto-Bold.ttf
           weight: 700
   assets:
-    - assets/refugio/
+    - assets/refugio/sanctuary.png
+    - assets/refugio/sanctuary-night.png
+    - assets/refugio/emotions.png
+    - assets/refugio/symbols.png
+    - assets/refugio/banners.png
+    - assets/refugio/banners-night.png
     - assets/fonts/Roboto-Regular.ttf
     - assets/fonts/Roboto-Bold.ttf
 

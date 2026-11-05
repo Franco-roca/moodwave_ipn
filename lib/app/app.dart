@@ -1,3 +1,5 @@
+import '../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -57,20 +59,20 @@ class _MoodWaveAppState extends ConsumerState<MoodWaveApp>
                   onDestinationSelected: (i) => shell.goBranch(i),
                   destinations: const [
                     NavigationDestination(
-                      icon: Icon(Icons.water_drop_outlined),
-                      selectedIcon: Icon(Icons.water_drop),
+                      icon: RefugioIcon(Icons.water_drop_outlined, size: 32),
+                      selectedIcon: RefugioIcon(Icons.water_drop, size: 32),
                       label: 'Hoy',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.calendar_month),
+                      icon: RefugioIcon(Icons.calendar_month, size: 32),
                       label: 'Calendario',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.insights),
+                      icon: RefugioIcon(Icons.insights, size: 32),
                       label: 'Análisis',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.person_outline),
+                      icon: RefugioIcon(Icons.person_outline, size: 32),
                       label: 'Perfil',
                     ),
                   ],

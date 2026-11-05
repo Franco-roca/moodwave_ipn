@@ -12,6 +12,7 @@ abstract final class Refugio {
   static const ink = Color(0xff233e32);
   static const apricot = Color(0xfff3b58d);
   static const radius = 22.0;
+  static const nightHero = 'assets/refugio/sanctuary-night.png';
   static const hero = 'assets/refugio/sanctuary.png';
   static const faces = 'assets/refugio/emotions.png';
 
@@ -187,20 +188,27 @@ class RefugioFace extends StatefulWidget {
   const RefugioFace({super.key, required this.mood, this.size = 48});
   final Mood mood;
   final double size;
+  static Future<void> preload() async {
+    await (_RefugioFaceState._atlas ??= _RefugioFaceState.load());
+  }
+
   @override
   State<RefugioFace> createState() => _RefugioFaceState();
 }
 
 class _RefugioFaceState extends State<RefugioFace> {
   static Future<ui.Image>? _atlas;
+  static ui.Image? _decoded;
   static Future<ui.Image> load() async {
     final bytes = await rootBundle.load(Refugio.faces);
     final codec = await ui.instantiateImageCodec(
-      bytes.buffer.asUint8List(),
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
       targetWidth: 1024,
+      allowUpscaling: false,
     );
     final frame = await codec.getNextFrame();
     codec.dispose();
+    _decoded = frame.image;
     return frame.image;
   }
 
@@ -209,18 +217,20 @@ class _RefugioFaceState extends State<RefugioFace> {
     child: SizedBox(
       width: widget.size,
       height: widget.size,
-      child: FutureBuilder<ui.Image>(
-        future: _atlas ??= load(),
-        builder: (context, snapshot) => snapshot.hasData
-            ? CustomPaint(
-                painter: _FacePainter(snapshot.data!, widget.mood.index),
-              )
-            : Icon(
-                Icons.spa_outlined,
-                size: widget.size * .7,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-      ),
+      child: _decoded != null
+          ? CustomPaint(painter: _FacePainter(_decoded!, widget.mood.index))
+          : FutureBuilder<ui.Image>(
+              future: _atlas ??= load(),
+              builder: (context, snapshot) => snapshot.hasData
+                  ? CustomPaint(
+                      painter: _FacePainter(snapshot.data!, widget.mood.index),
+                    )
+                  : Icon(
+                      Icons.spa_outlined,
+                      size: widget.size * .7,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+            ),
     ),
   );
 }

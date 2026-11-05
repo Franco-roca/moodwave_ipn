@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../app/state.dart';
+import '../../../core/refugio.dart';
 import '../../../core/widgets.dart';
 import '../../records/domain/record.dart';
 import '../../health/presentation/health_connection_card.dart';
@@ -66,7 +69,7 @@ class DataControls extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       ListTile(
-        leading: const Icon(Icons.storage_outlined),
+        leading: const RefugioIcon(Icons.storage_outlined),
         title: const Text('Ver datos'),
         subtitle: Text(
           '${store.records.length} emociones · ${store.healthData.length} datos físicos',
@@ -81,9 +84,8 @@ class DataControls extends StatelessWidget {
                   if (i < store.records.length) {
                     final r = store.records[i];
                     return ExpansionTile(
-                      title: Text(
-                        '${dateKey(r.date)} · ${r.mood.emoji} ${r.mood.value}/8',
-                      ),
+                      leading: RefugioFace(mood: r.mood, size: 32),
+                      title: Text('${dateKey(r.date)} · ${r.mood.value}/8'),
                       subtitle: Text(
                         'Energía ${r.energy}/10${r.test ? ' · SINTÉTICO' : ''}',
                       ),
@@ -113,12 +115,12 @@ class DataControls extends StatelessWidget {
         ),
       ),
       ListTile(
-        leading: const Icon(Icons.data_object),
+        leading: const RefugioIcon(Icons.data_object),
         title: const Text('Exportar JSON'),
         onTap: () => export(context),
       ),
       ListTile(
-        leading: const Icon(Icons.model_training),
+        leading: const RefugioIcon(Icons.model_training),
         title: const Text('Eliminar modelo local'),
         onTap: () async {
           if (await confirmDelete(
@@ -133,7 +135,7 @@ class DataControls extends StatelessWidget {
       ),
       if (kDebugMode)
         ListTile(
-          leading: const Icon(Icons.refresh),
+          leading: const RefugioIcon(Icons.refresh),
           title: const Text('Regenerar demostración'),
           subtitle: const Text(
             'Semilla reproducible · conserva datos personales',

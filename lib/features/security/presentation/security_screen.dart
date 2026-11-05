@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -169,7 +171,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                           4,
                           (i) => Padding(
                             padding: const EdgeInsets.all(10),
-                            child: Icon(
+                            child: RefugioIcon(
                               i < entered.length
                                   ? Icons.circle
                                   : Icons.circle_outlined,
@@ -220,7 +222,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                                     ? store.biometrics.cancel()
                                     : biometric()
                               : null,
-                          icon: const Icon(Icons.fingerprint, size: 32),
+                          icon: const RefugioIcon(Icons.fingerprint, size: 32),
                         ),
                         FilledButton.tonal(
                           onPressed: busy ? null : () => digit('0'),
@@ -241,7 +243,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                                           entered.length - 1,
                                         ),
                                 ),
-                          icon: const Icon(Icons.backspace_outlined),
+                          icon: const RefugioIcon(Icons.backspace_outlined),
                         ),
                       ],
                     ),

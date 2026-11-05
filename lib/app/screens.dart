@@ -1,6 +1,9 @@
+import '../core/refugio_art.dart';
+
 import 'dart:io';
 
 import '../core/mood_style.dart';
+import '../core/refugio.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +50,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   onPressed: () => setState(
                     () => month = DateTime(month.year, month.month - 1),
                   ),
-                  icon: const Icon(Icons.chevron_left),
+                  icon: const RefugioIcon(Icons.chevron_left),
                 ),
                 Expanded(
                   child: Text(
@@ -61,7 +64,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   onPressed: () => setState(
                     () => month = DateTime(month.year, month.month + 1),
                   ),
-                  icon: const Icon(Icons.chevron_right),
+                  icon: const RefugioIcon(Icons.chevron_right),
                 ),
               ],
             ),
@@ -138,10 +141,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                       ),
                                     ),
                                     if (record != null)
-                                      Text(
-                                        record.mood.emoji,
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
+                                      RefugioFace(mood: record.mood, size: 24),
                                   ],
                                 ),
                               ),
@@ -164,13 +164,16 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 child: Wrap(
                   spacing: 12,
                   runSpacing: 6,
-                  children: const [
-                    Text('😡 Enojado'),
-                    Text('😢 Triste'),
-                    Text('😐 Neutral'),
-                    Text('🙂 Bien'),
-                    Text('😄 Feliz'),
-                    Text('🤩 Excelente'),
+                  children: [
+                    for (final mood in [
+                      Mood.angry,
+                      Mood.sad,
+                      Mood.neutral,
+                      Mood.good,
+                      Mood.happy,
+                      Mood.excellent,
+                    ])
+                      RefugioMoodText(mood, size: 24),
                   ],
                 ),
               ),
@@ -205,8 +208,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${r.mood.emoji} ${r.mood.name}',
+                      RefugioMoodText(
+                        r.mood,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text('Energía ${r.energy}/10'),
@@ -231,7 +234,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                           TextButton.icon(
                             onPressed: () =>
                                 context.push('/edit/${dateKey(selected)}'),
-                            icon: const Icon(Icons.edit_outlined),
+                            icon: const RefugioIcon(Icons.edit_outlined),
                             label: const Text('Editar'),
                           ),
                           TextButton.icon(
@@ -249,7 +252,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                 }
                               }
                             },
-                            icon: const Icon(Icons.delete_outline),
+                            icon: const RefugioIcon(Icons.delete_outline),
                             label: const Text('Eliminar'),
                           ),
                         ],
@@ -311,7 +314,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                         ? DateTime(anchor.year, anchor.month - 1)
                         : shiftDay(anchor, -7),
                   ),
-                  icon: const Icon(Icons.chevron_left),
+                  icon: const RefugioIcon(Icons.chevron_left),
                 ),
                 Expanded(
                   child: Text(
@@ -328,7 +331,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                         ? DateTime(anchor.year, anchor.month + 1)
                         : shiftDay(anchor, 7),
                   ),
-                  icon: const Icon(Icons.chevron_right),
+                  icon: const RefugioIcon(Icons.chevron_right),
                 ),
               ],
             ),
@@ -356,7 +359,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                   ),
                   metric(
                     'Más frecuente',
-                    '${data.frequentMood!.emoji} ${data.frequentMood!.name}',
+                    data.frequentMood!.name,
                     Icons.favorite_outline,
                   ),
                 ],
@@ -364,7 +367,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
               const SizedBox(height: 16),
               Card(
                 child: ListTile(
-                  leading: const Icon(Icons.auto_awesome),
+                  leading: const RefugioIcon(Icons.auto_awesome),
                   title: const Text('Tu mejor día'),
                   subtitle: Text(
                     '${DateFormat('d MMM', 'es_MX').format(data.best!.date)} · ${data.best!.mood.name} · Energía ${data.best!.energy}/10',
@@ -406,8 +409,10 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
                   for (final r in data.records)
                     ListTile(
                       title: Text(DateFormat.yMMMd('es_MX').format(r.date)),
-                      subtitle: Text(
-                        '${r.mood.emoji} ${r.mood.name} · Ánimo ${r.mood.value}/8 · Energía ${r.energy}/10',
+                      subtitle: RefugioMoodText(
+                        r.mood,
+                        text:
+                            '${r.mood.name} · Ánimo ${r.mood.value}/8 · Energía ${r.energy}/10',
                       ),
                     ),
                 ],
@@ -506,7 +511,7 @@ class ProfileScreen extends ConsumerWidget {
                 child: CircleAvatar(
                   radius: 38,
                   child: store.name.isEmpty
-                      ? const Icon(Icons.person_outline, size: 40)
+                      ? const RefugioIcon(Icons.person_outline, size: 40)
                       : Text(
                           store.name.characters.first.toUpperCase(),
                           style: const TextStyle(
@@ -527,7 +532,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             TextButton.icon(
               onPressed: () => editName(context, store),
-              icon: const Icon(Icons.edit_outlined),
+              icon: const RefugioIcon(Icons.edit_outlined),
               label: const Text('Editar apodo'),
             ),
             const SizedBox(height: 12),
@@ -540,7 +545,7 @@ class ProfileScreen extends ConsumerWidget {
                       backgroundColor: Theme.of(context)
                           .colorScheme
                           .primaryContainer,
-                      child: Icon(
+                      child: RefugioIcon(
                         Icons.auto_graph_rounded,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
@@ -610,7 +615,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             Card(
               child: ListTile(
-                leading: const Icon(Icons.interests_outlined),
+                leading: const RefugioIcon(Icons.interests_outlined),
                 title: const Text('Actividad más frecuente'),
                 subtitle: Text(
                   stats.frequentActivity ?? 'Aún no hay actividades',
@@ -619,7 +624,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             FilledButton.icon(
               onPressed: () => context.push('/settings'),
-              icon: const Icon(Icons.settings_outlined),
+              icon: const RefugioIcon(Icons.settings_outlined),
               label: const Text('Configuración'),
             ),
           ],
@@ -666,23 +671,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            const WaveHeader(
+              'Configuración',
+              'Cuida tu espacio y tu privacidad.',
+            ),
+            const SizedBox(height: 12),
             section(context, 'Perfil'),
             ListTile(
-              leading: const Icon(Icons.person_outline),
+              leading: const RefugioIcon(Icons.person_outline),
               title: const Text('Nombre o apodo'),
               subtitle: Text(store.name.isEmpty ? 'Agregar apodo' : store.name),
               onTap: () => editName(context, store),
             ),
             section(context, 'Seguridad'),
             ListTile(
-              leading: const Icon(Icons.pin_outlined),
+              leading: const RefugioIcon(Icons.pin_outlined),
               title: const Text('Cambiar PIN'),
               onTap: () => context.push('/pin'),
             ),
             FutureBuilder(
               future: available,
               builder: (context, s) => ListTile(
-                leading: const Icon(Icons.fingerprint),
+                leading: const RefugioIcon(Icons.fingerprint),
                 title: Text(
                   s.hasData ? bioLabel(s.data!) : 'Comprobando biometría…',
                 ),
@@ -696,7 +706,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               }, 'Preferencia guardada'),
             ),
             ListTile(
-              leading: const Icon(Icons.lock_outline),
+              leading: const RefugioIcon(Icons.lock_outline),
               title: const Text('Bloquear MoodWave ahora'),
               onTap: store.lock,
             ),
@@ -736,7 +746,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                       const SizedBox(height: 12),
                       FilledButton.icon(
-                        icon: const Icon(Icons.auto_graph),
+                        icon: const RefugioIcon(Icons.auto_graph),
                         label: const Text('Generar escenario de 120 días'),
                         onPressed: () async {
                           final ok = await showDialog<bool>(
@@ -798,7 +808,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ],
                       ),
                       OutlinedButton.icon(
-                        icon: const Icon(Icons.delete_sweep_outlined),
+                        icon: const RefugioIcon(Icons.delete_sweep_outlined),
                         label: const Text('Eliminar datos sintéticos'),
                         onPressed: () async {
                           final count =
@@ -848,14 +858,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             DataControls(store: store),
             const ListTile(
-              leading: Icon(Icons.shield_outlined),
+              leading: RefugioIcon(Icons.shield_outlined),
               title: Text('Tus datos viven en este dispositivo'),
               subtitle: Text(
                 'No hay cuentas ni sincronización. La base SQLite está en el espacio privado de la aplicación.',
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.file_download_outlined),
+              leading: const RefugioIcon(Icons.file_download_outlined),
               title: const Text('Exportar CSV local'),
               subtitle: const Text(
                 'El archivo contiene tus reflexiones sin cifrar',
@@ -920,7 +930,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             if (kDebugMode)
               ListTile(
-                leading: const Icon(Icons.science_outlined),
+                leading: const RefugioIcon(Icons.science_outlined),
                 title: const Text('Generar 90 días de prueba'),
                 subtitle: const Text(
                   'Solo debug · no sobrescribe días existentes',
@@ -929,7 +939,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     action(store.generate, 'Datos de prueba generados'),
               ),
             ListTile(
-              leading: const Icon(Icons.cleaning_services_outlined),
+              leading: const RefugioIcon(Icons.cleaning_services_outlined),
               title: const Text('Eliminar registros de prueba'),
               onTap: () async {
                 if (await confirmDelete(
@@ -944,7 +954,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.delete_forever_outlined),
+              leading: const RefugioIcon(Icons.delete_forever_outlined),
               title: const Text('Eliminar todos los registros'),
               onTap: () async {
                 if (!await confirmDelete(
@@ -1011,7 +1021,7 @@ Widget metric(String label, String value, IconData icon) => Builder(
                 color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(
+              child: RefugioIcon(
                 icon,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
                 size: 22,

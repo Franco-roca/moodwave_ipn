@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +48,7 @@ class _PredictionPanelState extends State<PredictionPanel> {
           ),
         if (synthetic)
           const Chip(
-            avatar: Icon(Icons.science_outlined),
+            avatar: RefugioIcon(Icons.science_outlined),
             label: Text('DEMOSTRACIÓN · sin validez personal'),
           ),
         Card(
@@ -54,7 +56,7 @@ class _PredictionPanelState extends State<PredictionPanel> {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Icon(Icons.insights_rounded, size: 36),
+                const RefugioIcon(Icons.insights_rounded, size: 36),
                 const SizedBox(height: 16),
                 if (result == null) ...[
                   Text(
@@ -118,7 +120,7 @@ class _PredictionPanelState extends State<PredictionPanel> {
                   height: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : const Icon(Icons.play_arrow_rounded),
+              : const RefugioIcon(Icons.play_arrow_rounded),
           label: Text(
             s.predictionBusy
                 ? 'Entrenando en tu dispositivo…'

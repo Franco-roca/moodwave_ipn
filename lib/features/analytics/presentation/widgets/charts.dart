@@ -1,3 +1,5 @@
+import '../../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
@@ -85,7 +87,7 @@ class ValueBars extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.bottomCenter,
                                       child: d.value == null
-                                          ? Icon(
+                                          ? RefugioIcon(
                                               Icons.remove,
                                               color: scheme.outline,
                                             )
@@ -178,7 +180,7 @@ class TrendChart extends StatelessWidget {
                       r == null
                           ? 'Sin registro'
                           : metric == Metric.mood
-                          ? '${r.mood.emoji} ${r.mood.name}\nÁnimo ${r.mood.value}/8'
+                          ? '${r.mood.name}\nÁnimo ${r.mood.value}/8'
                           : 'Energía ${r.energy}/10',
                     ),
                     actions: [
@@ -216,7 +218,7 @@ class TrendChart extends StatelessWidget {
                 dense: true,
                 title: Text(DateFormat.yMMMd('es_MX').format(p.date)),
                 subtitle: Text(
-                  '${p.record!.mood.emoji} ${p.record!.mood.name} · Ánimo ${p.record!.mood.value}/8 · Energía ${p.record!.energy}/10',
+                  '${p.record!.mood.name} · Ánimo ${p.record!.mood.value}/8 · Energía ${p.record!.energy}/10',
                 ),
               ),
           ],

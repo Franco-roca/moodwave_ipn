@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/mood_style.dart';
@@ -33,8 +35,10 @@ class MoodOrb extends StatelessWidget {
       ),
       child: mood == null
           ? Image.asset(
-              Refugio.hero,
-              key: const ValueKey('sanctuary'),
+              Theme.of(context).brightness == Brightness.dark
+                  ? Refugio.nightHero
+                  : Refugio.hero,
+              key: ValueKey('sanctuary-${Theme.of(context).brightness.name}'),
               width: size * 2.1,
               height: size * 1.75,
               fit: BoxFit.contain,
@@ -88,7 +92,7 @@ class JourneySteps extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Icon(
+                        RefugioIcon(
                           [
                             Icons.favorite_outline,
                             Icons.wb_sunny_outlined,
@@ -302,9 +306,9 @@ class WeekRibbon extends StatelessWidget {
                                           '${d.day}',
                                           style: const TextStyle(fontSize: 12),
                                         )
-                                      : Text(
-                                          record.mood.emoji,
-                                          style: const TextStyle(fontSize: 19),
+                                      : RefugioFace(
+                                          mood: record.mood,
+                                          size: 28,
                                         ),
                                 ),
                               ],
@@ -368,15 +372,15 @@ class SavedMoment extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    '${record.mood.emoji} ${record.mood.name}',
+                  child: RefugioMoodText(
+                    record.mood,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-                const Icon(Icons.bolt_rounded, size: 20),
+                const RefugioIcon(Icons.bolt_rounded, size: 20),
                 Text('${record.energy}/10'),
               ],
             ),
@@ -387,7 +391,7 @@ class SavedMoment extends StatelessWidget {
                 children: [
                   for (final a in record.activities)
                     Chip(
-                      avatar: Icon(activityIcon(a), size: 16),
+                      avatar: RefugioIcon(activityIcon(a), size: 16),
                       label: Text(a),
                     ),
                 ],
@@ -424,7 +428,7 @@ class SavedMoment extends StatelessWidget {
             const SizedBox(height: 16),
             OutlinedButton.icon(
               onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined),
+              icon: const RefugioIcon(Icons.edit_outlined),
               label: const Text('Cambiar algo de mi día'),
             ),
           ],
@@ -433,7 +437,7 @@ class SavedMoment extends StatelessWidget {
       if (onCalendar != null)
         TextButton.icon(
           onPressed: onCalendar,
-          icon: const Icon(Icons.calendar_month_outlined),
+          icon: const RefugioIcon(Icons.calendar_month_outlined),
           label: const Text('Explorar mis días'),
         ),
     ],
