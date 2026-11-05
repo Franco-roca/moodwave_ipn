@@ -155,6 +155,12 @@ Para generar el APK ARM64 del Huawei:
 flutter build apk --debug --flavor trial --split-per-abi --target-platform android-arm64
 ```
 
+### Descargar APK
+
+La versión publicada de `MoodWave Prueba` para Android ARM64 está disponible en la siguiente Release:
+
+[Descargar MoodWave Prototipo Final](https://github.com/Franco-roca/moodwave_ipn/releases/tag/v1.0.0-prototipo-final)
+
 ## Validación
 
 ```powershell
