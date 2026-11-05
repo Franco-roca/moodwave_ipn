@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,7 +20,7 @@ class HealthFields extends StatelessWidget {
     child: ExpansionTile(
       key: const PageStorageKey('daily-health-fields'),
       maintainState: true,
-      leading: const Icon(Icons.favorite_border),
+      leading: const RefugioIcon(Icons.favorite_border),
       title: const Text('Bienestar físico'),
       subtitle: const Text('Sueño y pasos · opcional'),
       childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

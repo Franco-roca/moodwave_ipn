@@ -1,6 +1,9 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/mood_style.dart';
+import '../../../core/refugio.dart';
 
 import 'package:intl/intl.dart';
 
@@ -25,50 +28,25 @@ class MoodOrb extends StatelessWidget {
   final Mood? mood;
   final double size;
   @override
-  Widget build(BuildContext context) {
-    final reduced = MediaQuery.disableAnimationsOf(context);
-    return ExcludeSemantics(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: reduced ? 0 : 240),
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color:
-              mood?.background(
-                Theme.of(context).brightness == Brightness.dark,
-              ) ??
-              Theme.of(context).colorScheme.primaryContainer,
-          border: Border.all(
-            color: (mood?.color ?? Theme.of(context).colorScheme.primary)
-                .withValues(alpha: .2),
-            width: 7,
-          ),
-        ),
-        child: Center(
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: reduced ? 0 : 220),
-            transitionBuilder: (child, animation) => ScaleTransition(
-              scale: animation,
-              child: FadeTransition(opacity: animation, child: child),
-            ),
-            child: mood == null
-                ? Icon(
-                    Icons.waves_rounded,
-                    key: const ValueKey('wave'),
-                    size: size * .46,
-                    color: Theme.of(context).colorScheme.primary,
-                  )
-                : Text(
-                    mood!.emoji,
-                    key: ValueKey(mood),
-                    style: TextStyle(fontSize: size * .46),
-                  ),
-          ),
-        ),
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: AnimatedSwitcher(
+      duration: Duration(
+        milliseconds: MediaQuery.disableAnimationsOf(context) ? 0 : 220,
       ),
-    );
-  }
+      child: mood == null
+          ? Image.asset(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Refugio.nightHero
+                  : Refugio.hero,
+              key: ValueKey('sanctuary-${Theme.of(context).brightness.name}'),
+              width: size * 2.1,
+              height: size * 1.75,
+              fit: BoxFit.contain,
+              excludeFromSemantics: true,
+            )
+          : RefugioFace(key: ValueKey(mood), mood: mood!, size: size * 1.3),
+    ),
+  );
 }
 
 class JourneySteps extends StatelessWidget {
@@ -106,13 +84,15 @@ class JourneySteps extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: current == i
-                          ? scheme.primaryContainer
+                          ? (Theme.of(context).brightness == Brightness.dark
+                                ? scheme.primaryContainer
+                                : Refugio.apricot)
                           : scheme.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       children: [
-                        Icon(
+                        RefugioIcon(
                           [
                             Icons.favorite_outline,
                             Icons.wb_sunny_outlined,
@@ -120,7 +100,7 @@ class JourneySteps extends StatelessWidget {
                           ][i],
                           size: 20,
                           color: current == i
-                              ? scheme.primary
+                              ? scheme.onSurface
                               : scheme.onSurfaceVariant,
                         ),
                         const SizedBox(height: 4),
@@ -261,82 +241,87 @@ class WeekRibbon extends StatelessWidget {
     final start = shiftDay(day(date), 1 - date.weekday);
     final lookup = {for (final r in records) dateKey(r.date): r};
     final scheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: scheme.surface,
-        borderRadius: BorderRadius.circular(24),
+    return CustomPaint(
+      foregroundPainter: BotanicalArt(
+        dark: Theme.of(context).brightness == Brightness.dark,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Tu semana, a tu manera',
-            style: TextStyle(fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              for (var i = 0; i < 7; i++)
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      final d = shiftDay(start, i);
-                      final record = lookup[dateKey(d)];
-                      final today = dateKey(d) == dateKey(date);
-                      return Semantics(
-                        label:
-                            '${DateFormat.yMMMMd('es_MX').format(d)}: ${record?.mood.name ?? 'sin registro'}',
-                        child: ExcludeSemantics(
-                          child: Column(
-                            children: [
-                              Text(
-                                ['L', 'M', 'M', 'J', 'V', 'S', 'D'][i],
-                                style: TextStyle(
-                                  color: scheme.onSurfaceVariant,
-                                  fontSize: 12,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Tu semana, a tu manera',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                for (var i = 0; i < 7; i++)
+                  Expanded(
+                    child: Builder(
+                      builder: (context) {
+                        final d = shiftDay(start, i);
+                        final record = lookup[dateKey(d)];
+                        final today = dateKey(d) == dateKey(date);
+                        return Semantics(
+                          label:
+                              '${DateFormat.yMMMMd('es_MX').format(d)}: ${record?.mood.name ?? 'sin registro'}',
+                          child: ExcludeSemantics(
+                            child: Column(
+                              children: [
+                                Text(
+                                  ['L', 'M', 'M', 'J', 'V', 'S', 'D'][i],
+                                  style: TextStyle(
+                                    color: scheme.onSurfaceVariant,
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                width: 32,
-                                height: 32,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color:
-                                      record?.mood.background(
-                                        Theme.of(context).brightness ==
-                                            Brightness.dark,
-                                      ) ??
-                                      scheme.surfaceContainer,
-                                  border: today
-                                      ? Border.all(
-                                          color: scheme.primary,
-                                          width: 2,
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color:
+                                        record?.mood.background(
+                                          Theme.of(context).brightness ==
+                                              Brightness.dark,
+                                        ) ??
+                                        scheme.surfaceContainer,
+                                    border: today
+                                        ? Border.all(
+                                            color: scheme.primary,
+                                            width: 2,
+                                          )
+                                        : null,
+                                  ),
+                                  child: record == null
+                                      ? Text(
+                                          '${d.day}',
+                                          style: const TextStyle(fontSize: 12),
                                         )
-                                      : null,
+                                      : RefugioFace(
+                                          mood: record.mood,
+                                          size: 28,
+                                        ),
                                 ),
-                                child: record == null
-                                    ? Text(
-                                        '${d.day}',
-                                        style: const TextStyle(fontSize: 12),
-                                      )
-                                    : Text(
-                                        record.mood.emoji,
-                                        style: const TextStyle(fontSize: 19),
-                                      ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -387,15 +372,15 @@ class SavedMoment extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    '${record.mood.emoji} ${record.mood.name}',
+                  child: RefugioMoodText(
+                    record.mood,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-                const Icon(Icons.bolt_rounded, size: 20),
+                const RefugioIcon(Icons.bolt_rounded, size: 20),
                 Text('${record.energy}/10'),
               ],
             ),
@@ -406,7 +391,7 @@ class SavedMoment extends StatelessWidget {
                 children: [
                   for (final a in record.activities)
                     Chip(
-                      avatar: Icon(activityIcon(a), size: 16),
+                      avatar: RefugioIcon(activityIcon(a), size: 16),
                       label: Text(a),
                     ),
                 ],
@@ -443,7 +428,7 @@ class SavedMoment extends StatelessWidget {
             const SizedBox(height: 16),
             OutlinedButton.icon(
               onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined),
+              icon: const RefugioIcon(Icons.edit_outlined),
               label: const Text('Cambiar algo de mi día'),
             ),
           ],
@@ -452,7 +437,7 @@ class SavedMoment extends StatelessWidget {
       if (onCalendar != null)
         TextButton.icon(
           onPressed: onCalendar,
-          icon: const Icon(Icons.calendar_month_outlined),
+          icon: const RefugioIcon(Icons.calendar_month_outlined),
           label: const Text('Explorar mis días'),
         ),
     ],

@@ -1,3 +1,5 @@
+import '../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../core/mood_style.dart';
@@ -9,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../../app/state.dart';
 import '../../../core/widgets.dart';
+import '../../../core/refugio.dart';
 import '../domain/record.dart';
 import 'journey_widgets.dart';
 import '../../health/domain/daily_health.dart';
@@ -219,7 +222,7 @@ class _EditorState extends ConsumerState<Editor> {
             IconButton.filledTonal(
               tooltip: 'Paso anterior',
               onPressed: busy ? null : () => goStep(step - 1),
-              icon: const Icon(Icons.arrow_back_rounded),
+              icon: const RefugioIcon(Icons.arrow_back_rounded),
             ),
             const SizedBox(width: 12),
           ],
@@ -247,7 +250,7 @@ class _EditorState extends ConsumerState<Editor> {
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Icon(
+                  : RefugioIcon(
                       step == 2
                           ? Icons.check_rounded
                           : Icons.arrow_forward_rounded,
@@ -318,7 +321,7 @@ class _EditorState extends ConsumerState<Editor> {
                               ),
                               Tooltip(
                                 message: 'Tu diario es privado y local',
-                                child: Icon(
+                                child: RefugioIcon(
                                   Icons.shield_outlined,
                                   color: theme.colorScheme.primary,
                                   size: 20,
@@ -457,7 +460,7 @@ class _EditorState extends ConsumerState<Editor> {
                                           ...selected,
                                         })
                                           FilterChip(
-                                            avatar: Icon(
+                                            avatar: RefugioIcon(
                                               activityIcon(a),
                                               size: 19,
                                             ),
@@ -481,7 +484,9 @@ class _EditorState extends ConsumerState<Editor> {
                                             },
                                           ),
                                         ActionChip(
-                                          avatar: const Icon(Icons.add_rounded),
+                                          avatar: const RefugioIcon(
+                                            Icons.add_rounded,
+                                          ),
                                           label: const Text(
                                             'Mi propia actividad',
                                           ),
@@ -517,7 +522,7 @@ class _EditorState extends ConsumerState<Editor> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Icon(
+                                          const RefugioIcon(
                                             Icons.format_quote_rounded,
                                             size: 32,
                                           ),
@@ -594,12 +599,7 @@ class _EditorState extends ConsumerState<Editor> {
                                         ),
                                         child: Row(
                                           children: [
-                                            Text(
-                                              mood!.emoji,
-                                              style: const TextStyle(
-                                                fontSize: 30,
-                                              ),
-                                            ),
+                                            RefugioFace(mood: mood!, size: 42),
                                             const SizedBox(width: 12),
                                             Expanded(
                                               child: Text(

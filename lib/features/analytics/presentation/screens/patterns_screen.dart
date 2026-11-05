@@ -1,3 +1,5 @@
+import '../../../../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/state.dart';
 import '../../../../core/widgets.dart';
+import '../../../../core/refugio.dart';
 import '../../../records/domain/record.dart';
 import '../../../statistics/domain/statistics.dart';
 import '../../../health/presentation/health_connection_card.dart';
@@ -74,6 +77,17 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
                             Padding(
                               padding: const EdgeInsets.only(right: 8),
                               child: ChoiceChip(
+                                avatar: RefugioIllustration(
+                                  const [
+                                    RefugioSymbol.summary,
+                                    RefugioSymbol.activities,
+                                    RefugioSymbol.trends,
+                                    RefugioSymbol.sleep,
+                                    RefugioSymbol.prediction,
+                                    RefugioSymbol.reports,
+                                  ][i],
+                                  size: 26,
+                                ),
                                 label: Text(sections[i]),
                                 selected: section == i,
                                 showCheckmark: false,
@@ -95,7 +109,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: () => context.push('/reports'),
-                        icon: const Icon(Icons.picture_as_pdf_outlined),
+                        icon: const RefugioIcon(Icons.picture_as_pdf_outlined),
                         label: const Text('Generar reporte PDF'),
                       ),
                     ),
@@ -154,7 +168,9 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
                                     setState(() => anchor = picked);
                                   }
                                 },
-                                icon: const Icon(Icons.calendar_today_outlined),
+                                icon: const RefugioIcon(
+                                  Icons.calendar_today_outlined,
+                                ),
                               ),
                             ],
                           ),
@@ -228,10 +244,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
       const SizedBox(height: 12),
       Card(
         child: ListTile(
-          leading: Text(
-            s.best!.mood.emoji,
-            style: const TextStyle(fontSize: 30),
-          ),
+          leading: RefugioFace(mood: s.best!.mood, size: 40),
           title: const Text('Tu mejor día'),
           subtitle: Text(
             '${DateFormat.yMMMd('es_MX').format(s.best!.date)} · ${s.best!.mood.name}',
@@ -381,8 +394,9 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(DateFormat.yMMMd('es_MX').format(r.date)),
-                subtitle: Text(
-                  '${r.mood.emoji} ${r.mood.value}/8 · energía ${r.energy}/10',
+                subtitle: RefugioMoodText(
+                  r.mood,
+                  text: '${r.mood.value}/8 · energía ${r.energy}/10',
                 ),
               ),
             TextButton(
@@ -439,7 +453,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
     ),
     Card(
       child: ListTile(
-        leading: Icon(switch (data.comparison.direction) {
+        leading: RefugioIcon(switch (data.comparison.direction) {
           TrendDirection.ascending => Icons.trending_up,
           TrendDirection.descending => Icons.trending_down,
           _ => Icons.trending_flat,
@@ -494,12 +508,12 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
           ButtonSegment(
             value: false,
             label: Text('Sueño'),
-            icon: Icon(Icons.bedtime_outlined),
+            icon: RefugioIcon(Icons.bedtime_outlined),
           ),
           ButtonSegment(
             value: true,
             label: Text('Pasos'),
-            icon: Icon(Icons.directions_walk),
+            icon: RefugioIcon(Icons.directions_walk),
           ),
         ],
         selected: {healthSteps},
@@ -566,7 +580,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
         padding: const EdgeInsets.all(28),
         child: Column(
           children: [
-            Icon(
+            RefugioIcon(
               Icons.picture_as_pdf_outlined,
               size: 64,
               color: Theme.of(context).colorScheme.primary,
@@ -589,7 +603,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
     const SizedBox(height: 12),
     FilledButton.icon(
       onPressed: () => context.push('/reports'),
-      icon: const Icon(Icons.picture_as_pdf_outlined),
+      icon: const RefugioIcon(Icons.picture_as_pdf_outlined),
       label: const Text('Generar reporte'),
     ),
   ];
@@ -599,7 +613,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Icon(Icons.waves_rounded, size: 32),
+          const RefugioIcon(Icons.waves_rounded, size: 32),
           const Text(
             'Tu historia sigue creciendo',
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -641,7 +655,7 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(icon, color: Theme.of(context).colorScheme.primary),
+                RefugioIcon(icon, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(height: 12),
                 Text(
                   value,
@@ -666,12 +680,12 @@ class _PatternsScreenState extends ConsumerState<PatternsScreen> {
           ButtonSegment(
             value: Metric.mood,
             label: Text('Ánimo'),
-            icon: Icon(Icons.mood),
+            icon: RefugioIcon(Icons.mood),
           ),
           ButtonSegment(
             value: Metric.energy,
             label: Text('Energía'),
-            icon: Icon(Icons.bolt),
+            icon: RefugioIcon(Icons.bolt),
           ),
         ],
         selected: {metric},

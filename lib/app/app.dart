@@ -1,3 +1,5 @@
+import '../core/refugio_art.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import '../features/analytics/presentation/screens/patterns_screen.dart';
 import '../features/reports/presentation/report_screen.dart';
 
 import 'state.dart';
+import '../core/refugio.dart';
 import '../features/security/presentation/security_screen.dart';
 import '../features/records/presentation/editor.dart';
 import 'screens.dart';
@@ -56,20 +59,20 @@ class _MoodWaveAppState extends ConsumerState<MoodWaveApp>
                   onDestinationSelected: (i) => shell.goBranch(i),
                   destinations: const [
                     NavigationDestination(
-                      icon: Icon(Icons.water_drop_outlined),
-                      selectedIcon: Icon(Icons.water_drop),
+                      icon: RefugioIcon(Icons.water_drop_outlined, size: 32),
+                      selectedIcon: RefugioIcon(Icons.water_drop, size: 32),
                       label: 'Hoy',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.calendar_month),
+                      icon: RefugioIcon(Icons.calendar_month, size: 32),
                       label: 'Calendario',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.insights),
+                      icon: RefugioIcon(Icons.insights, size: 32),
                       label: 'Análisis',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.person_outline),
+                      icon: RefugioIcon(Icons.person_outline, size: 32),
                       label: 'Perfil',
                     ),
                   ],
@@ -160,49 +163,4 @@ class _MoodWaveAppState extends ConsumerState<MoodWaveApp>
 }
 
 String dateStamp() => DateTime.now().toString().substring(0, 10);
-ThemeData waveTheme(Brightness brightness) {
-  final dark = brightness == Brightness.dark;
-  final scheme = ColorScheme.fromSeed(
-    seedColor: const Color(0xff007f7b),
-    brightness: brightness,
-  );
-  return ThemeData(
-    useMaterial3: true,
-    colorScheme: scheme,
-    scaffoldBackgroundColor: dark
-        ? const Color(0xff0d2025)
-        : const Color(0xffeef9fb),
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: dark ? const Color(0xff173238) : Colors.white,
-      indicatorColor: scheme.primaryContainer,
-      labelTextStyle: const WidgetStatePropertyAll(
-        TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-      ),
-    ),
-    chipTheme: ChipThemeData(
-      side: BorderSide(color: scheme.outlineVariant.withValues(alpha: .5)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      selectedColor: scheme.primaryContainer,
-    ),
-    cardTheme: CardThemeData(
-      elevation: dark ? 0 : 1,
-      shadowColor: scheme.primary.withValues(alpha: .10),
-      color: dark ? const Color(0xff173238) : Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide.none,
-      ),
-    ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        minimumSize: const Size(48, 56),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-    ),
-  );
-}
+ThemeData waveTheme(Brightness brightness) => Refugio.theme(brightness);
