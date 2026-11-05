@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+    {"name": "MoodWave Laboratorio A/B/C", "request": "launch", "type": "dart", "program": "lib/design_lab/main.dart", "args": ["--flavor", "trial"]},
     {"name": "MoodWave Prueba (Android)", "request": "launch", "type": "dart", "program": "lib/main.dart", "args": ["--flavor", "trial"]},
     {"name": "MoodWave (Android)", "request": "launch", "type": "dart", "program": "lib/main.dart", "args": ["--flavor", "production"]},
     {"name": "MoodWave (release)", "request": "launch", "type": "dart", "flutterMode": "release", "args": ["--flavor", "production"]}
